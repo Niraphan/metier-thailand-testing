@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: metier-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: metier_blog
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./metier-db/01-schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./metier-db/02-init.sql:/docker-entrypoint-initdb.d/02-init.sql
+    networks:
+      - metier-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: metier-pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@metier.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - metier-network
+
+volumes:
+  postgres_data:
+
+networks:
+  metier-network:
