@@ -11,7 +11,7 @@ INSERT INTO admin (
 )
 VALUES (
     'admin',
-    '$2b$10$7QJ8QjX9ZkLzYpY3H0n6QeP2Ywz8Lr8Dk3Vf5JmTnXcBqR7uH1sGa'
+    '$2b$10$vhebf3S9zirHGnSCHfHOquIY0wy/qTQRHNiIvaCBNAQKqaykC/rYi'
 );
 
 -- =========================
