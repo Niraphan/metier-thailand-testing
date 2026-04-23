@@ -21,7 +21,7 @@ export function AdminNavbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-neutral-200 bg-[#151515] text-white">
-      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-6">
+      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between container px-4 md:px-0">
         <Link
           href="/admin"
           className="text-xl font-bold tracking-tight"

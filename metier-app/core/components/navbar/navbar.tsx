@@ -9,7 +9,7 @@ const navItems = [
   },
   {
     label: "Admin",
-    href: "/admin",
+    href: "/login",
   },
 ]
 
