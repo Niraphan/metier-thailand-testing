@@ -7,11 +7,16 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "10");
+  const blogName = searchParams.get("name") || "";
 
   try {
     const blogs = await prisma.blog.findMany({
       where: {
         status: "PUBLISH",
+        title: {
+          contains: blogName,
+          mode: "insensitive",
+        },
       },
       orderBy: {
         created_at: "desc",
@@ -35,6 +40,7 @@ export async function GET(request: Request) {
       page,
       limit,
       total: blogs.length,
+      totalPages: Math.ceil(blogs.length / limit),
     });
   } catch (error) {
     console.error("GET /api/blogs error:", error);
