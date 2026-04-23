@@ -6,4 +6,5 @@ export interface ApiEnvelope<TData> {
     page?: number
     limit?: number
     total?: number
+    totalPages?: number
 }

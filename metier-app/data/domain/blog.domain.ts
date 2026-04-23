@@ -1,6 +1,6 @@
 import { ApiEnvelope } from "./global.domain";
 
-export interface Blogs {
+export interface BlogPreview {
     blog_id: string;
     title: string;
     short_description: string;
@@ -42,5 +42,5 @@ export interface BlogComment {
     updated_at: string
 }
 
-export type BlogResponse = ApiEnvelope<Blogs[]>
+export type BlogResponse = ApiEnvelope<BlogPreview[]>
 export type BlogDetailResponse = ApiEnvelope<Blog>
