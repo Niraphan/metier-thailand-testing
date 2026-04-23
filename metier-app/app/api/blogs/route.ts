@@ -1,23 +1,28 @@
-// app/api/blogs/route.ts
-
 import { NextResponse } from "next/server";
 import { prisma } from "@/core/lib/prisma";
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const page = parseInt(searchParams.get("page") || "1");
-  const limit = parseInt(searchParams.get("limit") || "10");
-  const blogName = searchParams.get("name") || "";
-
   try {
-    const blogs = await prisma.blog.findMany({
-      where: {
-        status: "PUBLISH",
-        title: {
-          contains: blogName,
-          mode: "insensitive",
-        },
+    const { searchParams } = new URL(request.url);
+
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "10");
+    const blogName = searchParams.get("name") || "";
+
+    const whereCondition = {
+      status: "PUBLISH" as const,
+      title: {
+        contains: blogName,
+        mode: "insensitive" as const,
       },
+    };
+
+    const total = await prisma.blog.count({
+      where: whereCondition,
+    });
+
+    const blogs = await prisma.blog.findMany({
+      where: whereCondition,
       orderBy: {
         created_at: "desc",
       },
@@ -39,8 +44,8 @@ export async function GET(request: Request) {
       data: blogs,
       page,
       limit,
-      total: blogs.length,
-      totalPages: Math.ceil(blogs.length / limit),
+      total,
+      totalPages: Math.ceil(total / limit),
     });
   } catch (error) {
     console.error("GET /api/blogs error:", error);

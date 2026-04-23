@@ -20,9 +20,11 @@ export const SearchBar = ({
       params.set("name", keyword.trim())
     }
 
-    params.set("page", "1")
+    const queryString = params.toString()
 
-     router.replace(`/?${params.toString()}`)
+    const nextUrl = queryString ? `/?${queryString}` : "/"
+
+    router.replace(nextUrl)
   }
 
   return (

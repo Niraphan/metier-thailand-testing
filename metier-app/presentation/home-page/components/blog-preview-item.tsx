@@ -13,7 +13,7 @@ export const BlogPreviewItem = ({ blog }: { blog: BlogPreview }) => {
         height={150}
         className="w-full aspect-video group-hover:scale-105 transition-transform duration-300 rounded-t-2xl"
       />
-      <div className="flex flex-col p-2 md:p-4 gap-2 rounded-b-2xl bg-white">
+      <div className="flex flex-col h-full justify-between p-2 md:p-4 gap-2 rounded-b-2xl bg-white">
         <div className="flex flex-row justify-between items-start">
           <h3 className="text-base md:text-lg font-semibold w-[75%] line-clamp-2">{blog.title}</h3>
           <span className="text-xs md:text-sm text-gray-500 items-baseline "> {new Date(blog.created_at).toLocaleDateString("th-TH")}</span>
