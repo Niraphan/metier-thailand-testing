@@ -1,73 +1,42 @@
-"use client"
+// presentation/home-page/home-page.tsx
 
-import Image from "next/image"
-import Link from "next/link"
-import { Blogs } from "@/data/domain/blog.domain"
+import { BlogPreviewItem } from "./components/blog-preview-item"
+import { getBlogs } from "@/data/api/blog.hook"
+import { SearchBar } from "@/core/components/search-bar/search-bar"
 
 interface HomePageProps {
-  blogs: Blogs[]
+  searchParams?: {
+    name?: string
+    page?: string
+  }
 }
 
-export const HomePage = ({ blogs }: HomePageProps) => {
+export const HomePage = async ({ searchParams }: HomePageProps) => {
+  const name = searchParams?.name || ""
+  const page = Number(searchParams?.page || 1)
+
+  const blogs = await getBlogs(name, page, 10)
+
+  console.log("name", name)
+
   return (
-    <main className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <section className="bg-primary py-16">
-        <div className="mx-auto max-w-7xl px-6">
-          <h1 className="text-4xl font-bold text-white md:text-5xl">
-            Our Blog Articles
-          </h1>
-        </div>
-      </section>
+    <section className="container mx-auto flex h-full flex-col gap-10 px-4 py-20 md:px-0">
+      <h1 className="text-4xl font-bold">Blogs</h1>
+      <div className="flex flex-col gap-4">
+        <SearchBar defaultValue={name} />
 
-      <section className="mx-auto max-w-7xl px-6 py-14">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {blogs.map((blog) => (
-            <article
-              key={blog.blog_id}
-              className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
-            >
-              {/* Thumbnail */}
-              <div className="relative h-[240px] w-full">
-                <Image
-                  src={blog.thumbnail}
-                  alt={blog.title}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-
-              {/* Content */}
-              <div className="p-6">
-                <p className="mb-2 text-sm text-neutral-500">
-                  {new Date(blog.created_at).toLocaleDateString("th-TH")}
-                </p>
-
-                <h2 className="mb-3 line-clamp-2 text-xl font-semibold text-foreground">
-                  {blog.title}
-                </h2>
-
-                <p className="mb-5 line-clamp-3 text-sm leading-relaxed text-neutral-600">
-                  {blog.short_description}
-                </p>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-neutral-500">
-                    👁 {blog.view_amount} views
-                  </span>
-
-                  <Link
-                    href={`/blog/${blog.slug}`}
-                    className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
-                  >
-                    Read More
-                  </Link>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-    </main>
+        {blogs.data.length > 0 ? (
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+            {blogs.data.map((blog) => (
+              <BlogPreviewItem key={blog.blog_id} blog={blog} />
+            ))}
+          </div>
+        ) : (
+          <div className="flex h-[250px] w-full flex-col items-center justify-center">
+            <p className="text-lg font-semibold">No blogs found</p>
+          </div>
+        )}
+      </div>
+    </section>
   )
 }

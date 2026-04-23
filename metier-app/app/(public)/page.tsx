@@ -1,10 +1,16 @@
-import { getBlogs } from "@/data/api/blog.hook";
-import { HomePage } from "@/presentation/home-page/home-page";
+import { HomePage } from "@/presentation/home-page/home-page"
 
-export default async function Home() {
-  const blogs = await getBlogs();
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    name?: string
+    page?: string
+  }>
+}) {
+  const resolvedSearchParams = await searchParams
 
   return (
-    <HomePage blogs={blogs.data} />
-  );
+    <HomePage searchParams={resolvedSearchParams} />
+  )
 }
