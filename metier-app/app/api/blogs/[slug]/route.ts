@@ -17,6 +17,7 @@ export async function GET(
     await prisma.blog.update({
       where: {
         slug,
+        status: "PUBLISH",
       },
       data: {
         view_amount: {
