@@ -111,3 +111,84 @@ export async function PATCH(
         );
     }
 }
+
+export async function GET(
+  request: Request,
+  context: {
+    params: Promise<{
+      id: string;
+    }>;
+  }
+) {
+  try {
+    const { id } = await context.params;
+
+    await prisma.blog.update({
+      where: {
+        blog_id: id,
+      },
+      data: {
+        view_amount: {
+          increment: 1,
+        },
+      },
+    });
+
+    const blog = await prisma.blog.findUnique({
+      where: {
+        blog_id: id,
+      },
+      include: {
+        blog_picture: {
+          select: {
+            blog_picture_id: true,
+            image_url: true,
+          },
+        },
+        blog_comment: {
+          where: {
+            status: "APPROVED",
+          },
+          orderBy: {
+            created_at: "desc",
+          },
+          select: {
+            blog_comment_id: true,
+            username: true,
+            comment: true,
+            created_at: true,
+          },
+        },
+      },
+    });
+
+    if (!blog) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Blog not found",
+        },
+        {
+          status: 404,
+        }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: blog,
+    });
+  } catch (error) {
+    console.error("GET /api/admin/blogs/[id] error:", error);
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Failed to fetch blog detail",
+      },
+      {
+        status: 500,
+      }
+    );
+  }
+}
