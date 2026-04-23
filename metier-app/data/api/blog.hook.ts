@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BlogDetailResponse, BlogResponse } from "../domain/blog.domain";
 
-const baseUrl = process.env.BACKEND_ENDPOINT
+const baseUrl = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT
 
 export const getBlogs = async (
   name: string = "",

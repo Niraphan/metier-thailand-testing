@@ -18,7 +18,7 @@ export interface Blog {
     slug: string;
     thumbnail: string;
     view_amount: number;
-    status: string;
+    status: "PUBLISHED" | "UNPUBLISHED";
     blog_picture: BlogPicture[];
     blog_comment: BlogComment[];
 
@@ -29,9 +29,8 @@ export interface Blog {
 export interface BlogPicture {
     blog_picture_id: string;
     blog_id: string;
-    picture_url: string;
+    image_url: string;
     created_at: string;
-    updated_at: string;
 }
 
 export interface BlogComment {
@@ -39,7 +38,6 @@ export interface BlogComment {
     username: string
     comment: string
     created_at: string
-    updated_at: string
 }
 
 export type BlogResponse = ApiEnvelope<BlogPreview[]>
