@@ -32,6 +32,34 @@ services:
     networks:
       - metier-network
 
+  next-app:
+    image: oven/bun:1
+    container_name: metier-next-app
+    working_dir: /app
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./metier-app:/app
+      - /app/node_modules
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/metier_blog?schema=public"
+      NEXT_PUBLIC_BACKEND_URL: "http://localhost:3000/api"
+      ADMIN_USERNAME: "admin"
+      ADMIN_PASSWORD: "admin123"
+      JWT_SECRET: "supersecretjwt"
+    depends_on:
+      - postgres
+    command: >
+      sh -c "
+        bun install &&
+        bunx prisma generate &&
+        bunx prisma db push &&
+        bun run dev
+      "
+    networks:
+      - metier-network
+
 volumes:
   postgres_data:
 
