@@ -5,18 +5,13 @@ import { prisma } from "@/core/lib/prisma";
 
 export async function PATCH(
   request: Request,
-  context: {
-    params: Promise<{
-      id: string;
-    }>;
-  }
 ) {
   try {
-    const { id: comment_id } = await context.params;
+
     const authToken = request.headers.get("authorization");
     const body = await request.json();
 
-    const { status } = body;
+    const { status, blog_comment_id } = body;
 
     if (!authToken) {
       return NextResponse.json(
@@ -32,7 +27,7 @@ export async function PATCH(
 
     const comment = await prisma.blog_comment.findUnique({
       where: {
-        blog_comment_id: comment_id,
+        blog_comment_id: blog_comment_id,
       },
     });
 
@@ -50,7 +45,7 @@ export async function PATCH(
 
     const updatedComment = await prisma.blog_comment.update({
       where: {
-        blog_comment_id: comment_id,
+        blog_comment_id: blog_comment_id,
       },
       data: {
         ...(status && { status }),

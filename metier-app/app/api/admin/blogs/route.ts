@@ -3,35 +3,33 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/core/lib/prisma";
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const page = parseInt(searchParams.get("page") || "1");
-  const limit = parseInt(searchParams.get("limit") || "10");
-
+export async function GET() {
   try {
     const blogs = await prisma.blog.findMany({
-      orderBy: {
-        created_at: "desc",
-      },
-      select: {
-        blog_id: true,
-        title: true,
-        short_description: true,
-        slug: true,
-        thumbnail: true,
-        view_amount: true,
-        created_at: true,
-      },
-      take: limit,
-      skip: (page - 1) * limit,
-    });
+        orderBy: {
+          created_at: "desc",
+        },
+        select: {
+          blog_id: true,
+          title: true,
+          short_description: true,
+          slug: true,
+          status: true,
+          thumbnail: true,
+          view_amount: true,
+          created_at: true,
+          blog_picture: {
+            select: {
+              image_url: true,
+              blog_picture_id: true,
+            },
+          },
+        },
+      });
 
     return NextResponse.json({
       success: true,
       data: blogs,
-      page,
-      limit,
-      total: blogs.length,
     });
   } catch (error) {
     console.error("GET /api/blogs error:", error);

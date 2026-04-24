@@ -1,3 +1,6 @@
+
+import { AdminPage } from "@/presentation/admin-page/admin-page"
+
 export default function Page() {
-    return <div></div>
+    return <AdminPage />
 }
