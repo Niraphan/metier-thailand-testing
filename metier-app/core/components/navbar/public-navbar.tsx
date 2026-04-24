@@ -11,7 +11,7 @@ export function PublicNavbar({
   return (
     <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur-md ">
       <div className=" h-[72px]  container mx-auto">
-        <div className="md:px-0 px-4 max-w-7xl items-center justify-between h-full flex w-full">
+        <div className="md:px-0 px-4 items-center justify-between h-full flex w-full">
           <Link
             href="/"
             className="text-xl font-bold tracking-tight text-foreground"
